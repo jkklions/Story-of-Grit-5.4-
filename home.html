@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GRIT AI</title>
+  <style>
+    :root{
+      --bg:#06080c;
+      --panel:#10151d;
+      --panel2:rgba(16,21,29,.82);
+      --text:#edf3ff;
+      --muted:#9aa5b6;
+      --accent:#55f0ff;
+      --accent2:#8a5cff;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 24px 70px rgba(0,0,0,.42);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    html{scroll-behavior:smooth}
+
+    body{
+      background:
+        radial-gradient(circle at top, rgba(85,240,255,.13), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(138,92,255,.12), transparent 20%),
+        linear-gradient(180deg, #0b0f15 0%, #06080c 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:100;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:16px;
+      padding:18px 40px;
+      background:rgba(6,8,12,.72);
+      border-bottom:1px solid var(--border);
+      backdrop-filter:blur(14px);
+    }
+
+    .brand{
+      font-weight:900;
+      letter-spacing:2px;
+      color:var(--accent);
+      text-shadow:0 0 14px rgba(85,240,255,.35);
+      font-size:1.1rem;
+      white-space:nowrap;
+    }
+
+    .nav{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+
+    .nav a{
+      color:var(--muted);
+      padding:8px 12px;
+      border-radius:999px;
+      transition:.25s ease;
+    }
+
+    .nav a:hover{
+      color:var(--text);
+      background:rgba(85,240,255,.08);
+    }
+
+    .btn{
+      display:inline-block;
+      padding:13px 18px;
+      border-radius:999px;
+      font-weight:700;
+      border:1px solid transparent;
+      transition:.25s ease;
+      cursor:pointer;
+    }
+
+    .btn:hover{transform:translateY(-2px)}
+
+    .primary{
+      background:linear-gradient(135deg,var(--accent),#31d7ff);
+      color:#031015;
+      box-shadow:0 0 0 1px rgba(85,240,255,.25), 0 14px 34px rgba(85,240,255,.18);
+    }
+
+    .secondary{
+      background:transparent;
+      color:var(--text);
+      border-color:rgba(255,255,255,.14);
+    }
+
+    .ghost{
+      background:rgba(255,255,255,.03);
+      border-color:var(--border);
+      color:var(--text);
+    }
+
+    .hero{
+      width:min(1200px,92%);
+      margin:70px auto 40px;
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:30px;
+      align-items:center;
+    }
+
+    .hero-copy{
+      padding:28px 0;
+    }
+
+    .eyebrow{
+      color:var(--accent);
+      letter-spacing:4px;
+      font-size:.8rem;
+      margin-bottom:14px;
+    }
+
+    .hero h1{
+      font-size:clamp(3rem,7vw,5.8rem);
+      line-height:.95;
+      margin-bottom:18px;
+      max-width:10ch;
+    }
+
+    .subtext{
+      color:var(--muted);
+      font-size:1.08rem;
+      max-width:640px;
+      margin-bottom:26px;
+      line-height:1.7;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .hero-card{
+      background:linear-gradient(180deg, rgba(17,21,29,.92), rgba(10,13,18,.9));
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+
+    .hero-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at top right, rgba(85,240,255,.15), transparent 25%),
+        radial-gradient(circle at bottom left, rgba(138,92,255,.16), transparent 22%);
+      pointer-events:none;
+    }
+
+    .terminal{
+      position:relative;
+      padding:18px;
+    }
+
+    .dots{
+      display:flex;
+      gap:8px;
+      margin-bottom:14px;
+    }
+
+    .dots span{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 12px rgba(85,240,255,.35);
+    }
+
+    .terminal-box{
+      background:rgba(0,0,0,.28);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      padding:18px;
+    }
+
+    .terminal-box p{
+      color:var(--muted);
+      line-height:1.7;
+      margin-bottom:12px;
+    }
+
+    .terminal-box strong{
+      color:var(--text);
+    }
+
+    .section{
+      width:min(1200px,92%);
+      margin:0 auto 48px;
+    }
+
+    .section h2{
+      font-size:2rem;
+      margin-bottom:16px;
+    }
+
+    .section p.lead{
+      color:var(--muted);
+      margin-bottom:22px;
+      max-width:800px;
+      line-height:1.7;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:18px;
+    }
+
+    .card{
+      background:var(--panel2);
+      border:1px solid var(--border);
+      border-radius:20px;
+      padding:22px;
+      box-shadow:var(--shadow);
+    }
+
+    .card h3{
+      margin-bottom:10px;
+      color:var(--accent);
+      font-size:1.1rem;
+    }
+
+    .card p{
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .compare{
+      background:linear-gradient(180deg, rgba(16,21,29,.55), rgba(16,21,29,.18));
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:26px;
+      box-shadow:var(--shadow);
+    }
+
+    .compare-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+      gap:18px;
+      margin-top:18px;
+    }
+
+    .compare-item{
+      padding:20px;
+      border-radius:18px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.07);
+    }
+
+    .compare-item .tag{
+      display:inline-block;
+      font-size:.75rem;
+      letter-spacing:1.5px;
+      text-transform:uppercase;
+      color:#061015;
+      background:var(--accent);
+      padding:6px 10px;
+      border-radius:999px;
+      margin-bottom:12px;
+      font-weight:800;
+    }
+
+    .compare-item h3{
+      margin-bottom:8px;
+    }
+
+    .compare-item p{
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    .cta-banner{
+      width:min(1200px,92%);
+      margin:0 auto 60px;
+      padding:28px;
+      border-radius:24px;
+      border:1px solid rgba(85,240,255,.18);
+      background:
+        radial-gradient(circle at top left, rgba(85,240,255,.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(138,92,255,.12), transparent 28%),
+        rgba(10,13,18,.85);
+      box-shadow:var(--shadow);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+
+    .cta-banner h2{
+      font-size:1.5rem;
+      margin-bottom:8px;
+    }
+
+    .cta-banner p{
+      color:var(--muted);
+      line-height:1.6;
+      max-width:700px;
+    }
+
+    .footer{
+      padding:26px 18px;
+      border-top:1px solid var(--border);
+      text-align:center;
+      color:var(--muted);
+      background:rgba(6,8,12,.55);
+    }
+
+    @media (max-width: 900px){
+      .topbar{
+        padding:16px 18px;
+      }
+
+      .hero{
+        grid-template-columns:1fr;
+        margin-top:40px;
+      }
+
+      .hero h1{
+        max-width:none;
+      }
+    }
+
+    @media (max-width: 640px){
+      .nav{
+        gap:8px;
+      }
+
+      .nav a{
+        padding:7px 10px;
+        font-size:.95rem;
+      }
+
+      .section h2{
+        font-size:1.65rem;
+      }
+
+      .cta-banner{
+        padding:22px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">GRIT AI</div>
+    <nav class="nav">
+      <a href="#product">Product</a>
+      <a href="#examples">Examples</a>
+      <a href="#compare">Why GRIT</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#signup" class="btn ghost">Sign in</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">THE NO-BS AI ASSISTANT</p>
+        <h1>Answers that hit harder.</h1>
+        <p class="subtext">
+          GRIT AI helps you write, code, brainstorm, and organize faster with a cleaner, sharper, more cinematic experience.
+        </p>
+        <div class="actions">
+          <a href="#signup" class="btn primary">Start free</a>
+          <a href="#product" class="btn secondary">See how it works</a>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <div class="terminal">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="terminal-box">
+            <p><strong>User:</strong> Build me a futuristic homepage with a gritty sci-fi look.</p>
+            <p><strong>GRIT AI:</strong> Got it. Dark UI, neon accents, cinematic shadows, and a bold layout that feels powerful and modern.</p>
+            <p><strong>User:</strong> Can you make it multi-page too?</p>
+            <p><strong>GRIT AI:</strong> Yes — with clean navigation, responsive sections, and a premium visual style.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="product" class="section">
+      <h2>Built for people who want results.</h2>
+      <p class="lead">
+        GRIT AI is designed for creators, coders, students, and builders who want a sleek interface and practical responses without extra fluff.
+      </p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Fast Replies</h3>
+          <p>Get answers quickly with a design that keeps focus on the work.</p>
+        </div>
+        <div class="card">
+          <h3>Cleaner Workflow</h3>
+          <p>Use it for notes, brainstorming, coding, planning, and creative work.</p>
+        </div>
+        <div class="card">
+          <h3>Gritty Visual Style</h3>
+          <p>Dark, atmospheric, and cinematic — made to stand out.</p>
+        </div>
+        <div class="card">
+          <h3>Made for Builders</h3>
+          <p>Great for websites, concepts, prototypes, and product ideas.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="examples" class="section">
+      <h2>Examples</h2>
+      <p class="lead">A few ways people could use GRIT AI.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Writing</h3>
+          <p>Draft landing pages, scripts, emails, and polished content.</p>
+        </div>
+        <div class="card">
+          <h3>Coding</h3>
+          <p>Generate HTML, CSS, JavaScript, and app layouts you can paste directly.</p>
+        </div>
+        <div class="card">
+          <h3>Planning</h3>
+          <p>Organize projects, outlines, and step-by-step strategies.</p>
+        </div>
+        <div class="card">
+          <h3>Creative Concepts</h3>
+          <p>Build worlds, brands, game ideas, and visual direction.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="compare" class="section">
+      <div class="compare">
+        <h2>Why choose GRIT AI?</h2>
+        <p class="lead">
+          A sharper, more direct experience designed to feel premium and different.
+        </p>
+
+        <div class="compare-grid">
+          <div class="compare-item">
+            <span class="tag">Sharper</span>
+            <h3>Direct answers</h3>
+            <p>Less generic, more useful. Built to get to the point quickly.</p>
+          </div>
+          <div class="compare-item">
+            <span class="tag">Built for creators</span>
+            <h3>Great for making things</h3>
+            <p>Perfect for websites, concepts, stories, and product experiments.</p>
+          </div>
+          <div class="compare-item">
+            <span class="tag">Stylish</span>
+            <h3>Cinematic UI</h3>
+            <p>Dark theme, glowing accents, and a premium futuristic feel.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing" class="section">
+      <h2>Simple pricing</h2>
+      <p class="lead">You can replace these with your real plans later.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>Free</h3>
+          <p>Basic access, limited messages, and core features.</p>
+        </div>
+        <div class="card">
+          <h3>Pro</h3>
+          <p>More messages, faster tools, and advanced features.</p>
+        </div>
+        <div class="card">
+          <h3>Studio</h3>
+          <p>Best for teams, builders, and serious creators.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="signup" class="cta-banner">
+      <div>
+        <h2>Ready to launch GRIT AI?</h2>
+        <p>
+          This is a single-file starter you can copy and paste right now. If you want, I can make the next version even more aggressive, futuristic, or more like a real AI product site.
+        </p>
+      </div>
+      <a href="#" class="btn primary">Get Started</a>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 GRIT AI</p>
+  </footer>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', function (e) {
+        const targetId = this.getAttribute('href');
+        const target = document.querySelector(targetId);
+
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
